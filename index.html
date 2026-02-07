@@ -10,16 +10,18 @@
             padding: 0;
             box-sizing: border-box;
             font-family: 'Arial', sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
         
         body {
-            background-color: #ffe6f2;
+            background-color: #f0f8ff;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             padding: 15px;
             flex-direction: column;
+            touch-action: manipulation;
         }
         
         .container {
@@ -29,13 +31,14 @@
             text-align: center;
             width: 100%;
             max-width: 400px;
-            border: 2px solid #ff66b2;
+            border: 2px solid #2c3e50;
             position: relative;
             overflow: hidden;
+            border-radius: 10px;
         }
         
         h1 {
-            color: #ff3399;
+            color: #2c3e50;
             margin-bottom: 15px;
             font-size: 1.6rem;
         }
@@ -45,10 +48,11 @@
             width: 100%;
             height: 220px;
             overflow: hidden;
-            border: 3px solid #ff66b2;
+            border: 3px solid #3498db;
             display: flex;
             justify-content: center;
             align-items: center;
+            border-radius: 8px;
         }
         
         .gif-container img {
@@ -59,7 +63,7 @@
         
         .question {
             font-size: 1.4rem;
-            color: #cc0066;
+            color: #2c3e50;
             margin: 20px 0;
             font-weight: bold;
             line-height: 1.3;
@@ -72,37 +76,46 @@
             margin-top: 20px;
             position: relative;
             min-height: 60px;
+            touch-action: manipulation;
         }
         
         .btn {
-            padding: 12px 30px;
-            font-size: 1.3rem;
+            padding: 14px 32px;
+            font-size: 1.4rem;
             border: none;
-            border-radius: 0;
+            border-radius: 8px;
             cursor: pointer;
             font-weight: bold;
             transition: all 0.2s ease;
-            min-width: 120px;
+            min-width: 130px;
             position: relative;
             z-index: 2;
+            touch-action: manipulation;
+            user-select: none;
+            min-height: 55px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
         .btn-yes {
-            background-color: #4CAF50;
+            background-color: #3498db;
             color: white;
         }
         
-        .btn-yes:active {
-            background-color: #45a049;
+        .btn-yes:active, .btn-yes:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
         }
         
         .btn-no {
-            background-color: #ff3333;
+            background-color: #e74c3c;
             color: white;
         }
         
-        .btn-no:active {
-            background-color: #ff1a1a;
+        .btn-no:active, .btn-no:hover {
+            background-color: #c0392b;
+            transform: translateY(-2px);
         }
         
         .hearts {
@@ -117,7 +130,7 @@
         
         .heart {
             position: absolute;
-            color: #ff66b2;
+            color: #3498db;
             font-size: 18px;
             opacity: 0;
             animation: float 5s linear infinite;
@@ -143,7 +156,7 @@
         .message {
             margin-top: 20px;
             font-size: 1.2rem;
-            color: #ff3399;
+            color: #2c3e50;
             min-height: 40px;
             font-weight: bold;
             opacity: 0;
@@ -153,6 +166,40 @@
         .message.show {
             opacity: 1;
         }
+        
+        @media (max-width: 480px) {
+            .buttons-container {
+                flex-direction: column;
+                align-items: center;
+                gap: 15px;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 250px;
+                padding: 16px;
+                font-size: 1.3rem;
+            }
+            
+            .container {
+                padding: 20px 15px;
+            }
+            
+            .question {
+                font-size: 1.3rem;
+            }
+        }
+        
+        @media (hover: none) and (pointer: coarse) {
+            .btn {
+                padding: 16px;
+                font-size: 1.3rem;
+            }
+            
+            .btn:active {
+                transform: scale(0.98);
+            }
+        }
     </style>
 </head>
 <body>
@@ -160,14 +207,14 @@
         <h1></h1>
         
         <div class="gif-container">
-            <img src="https://gifdb.com/images/high/cute-love-bear-roses-ou7zho5oosxnpo6k.gif">
+            <img src="https://gifdb.com/images/high/cute-love-bear-roses-ou7zho5oosxnpo6k.gif" alt="Miś z różami">
         </div>
         
         <div class="question" id="questionText">Czy zostaniesz moją walentynką?</div>
         
         <div class="buttons-container">
-            <button class="btn btn-yes" id="yesBtn">Tak</button>
-            <button class="btn btn-no" id="noBtn">Nie</button>
+            <button class="btn btn-yes" id="yesBtn" aria-label="Tak">Tak</button>
+            <button class="btn btn-no" id="noBtn" aria-label="Nie">Nie</button>
         </div>
         
         <div class="message" id="message"></div>
@@ -213,7 +260,7 @@
                 }
             }
             
-            yesBtn.addEventListener('click', function() {
+            function handleYesClick() {
                 questionText.textContent = "YEEEEEY! Wiedzialem, ze to wybierzesz haha";
                 message.classList.add('show');
                 
@@ -234,17 +281,17 @@
                 const styleSheet = document.styleSheets[0];
                 styleSheet.insertRule(`
                     @keyframes pulse {
-                        from { transform: scale(1); background-color: #4CAF50; }
-                        to { transform: scale(1.1); background-color: #2E8B57; }
+                        from { transform: scale(1); background-color: #3498db; }
+                        to { transform: scale(1.1); background-color: #2980b9; }
                     }
                 `, styleSheet.cssRules.length);
                 
                 yesBtn.textContent = "KOCHAM CIE ❤️❤️❤️";
                 
                 noBtn.style.display = 'none';
-            });
+            }
             
-            noBtn.addEventListener('click', function() {
+            function handleNoClick() {
                 yesScale += 0.5;
                 yesBtn.style.transform = `scale(${yesScale})`;
                 
@@ -273,11 +320,13 @@
                 noBtn.style.left = randomX + 'px';
                 noBtn.style.top = randomY + 'px';
                 
-                const redShades = ['#ff3333', '#ff6666', '#ff9999', '#ffcccc'];
+                const redShades = ['#e74c3c', '#c0392b', '#d35400', '#e67e22'];
                 noBtn.style.backgroundColor = redShades[noClickCount % redShades.length];
                 
                 const sadMessages = [
-                    ""
+                    "Kliknij TAK! ❤️",
+                    "Nie poddawaj się!",
+                    "Proszę, powiedz TAK!"
                 ];
                 message.textContent = sadMessages[Math.floor(Math.random() * sadMessages.length)];
                 message.classList.add('show');
@@ -296,12 +345,16 @@
                     const gifContainer = document.querySelector('.gif-container img');
                     gifContainer.src = "https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExZ2V0a3RycmUzbDYxeXd1cXI1M3J4aGYxd2pnZ3k1bW8yc3VmbDc4NiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/OHRF8LZis06OiPDJby/giphy.gif";
                 }
-            });
+                
+                if (noClickCount >= 10) {
+                    noBtn.style.display = 'none';
+                }
+            }
             
-            noBtn.addEventListener('touchstart', function(e) {
+            function handleNoTouch(e) {
                 e.preventDefault();
                 
-                if (noClickCount > 2) {
+                if (noClickCount > 2 && noClickCount < 10) {
                     const containerRect = buttonsContainer.getBoundingClientRect();
                     const btnRect = noBtn.getBoundingClientRect();
                     
@@ -311,21 +364,35 @@
                     let currentLeft = parseInt(noBtn.style.left) || 0;
                     let currentTop = parseInt(noBtn.style.top) || 0;
                     
-                    const moveX = (Math.random() - 0.5) * 100;
-                    const moveY = (Math.random() - 0.5) * 100;
+                    const moveX = (Math.random() - 0.5) * 80;
+                    const moveY = (Math.random() - 0.5) * 80;
                     
-                    const newX = Math.max(0, Math.min(maxX, currentLeft + moveX));
-                    const newY = Math.max(0, Math.min(maxY, currentTop + moveY));
+                    const newX = Math.max(10, Math.min(maxX - 10, currentLeft + moveX));
+                    const newY = Math.max(10, Math.min(maxY - 10, currentTop + moveY));
                     
-                    noBtn.style.transition = 'all 0.1s ease';
+                    noBtn.style.transition = 'all 0.15s ease';
                     noBtn.style.left = newX + 'px';
                     noBtn.style.top = newY + 'px';
                     
                     setTimeout(() => {
                         noBtn.style.transition = 'all 0.2s ease';
-                    }, 100);
+                    }, 150);
                 }
+            }
+            
+            yesBtn.addEventListener('click', handleYesClick);
+            yesBtn.addEventListener('touchend', function(e) {
+                e.preventDefault();
+                handleYesClick();
             });
+            
+            noBtn.addEventListener('click', handleNoClick);
+            noBtn.addEventListener('touchend', function(e) {
+                e.preventDefault();
+                handleNoClick();
+            });
+            
+            noBtn.addEventListener('touchstart', handleNoTouch);
             
             createHearts();
         });
