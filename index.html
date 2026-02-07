@@ -31,14 +31,14 @@
             text-align: center;
             width: 100%;
             max-width: 400px;
-            border: 2px solid #2c3e50;
+            border: 2px solid #1a237e;
             position: relative;
             overflow: hidden;
             border-radius: 10px;
         }
         
         h1 {
-            color: #2c3e50;
+            color: #1a237e;
             margin-bottom: 15px;
             font-size: 1.6rem;
         }
@@ -48,7 +48,7 @@
             width: 100%;
             height: 220px;
             overflow: hidden;
-            border: 3px solid #3498db;
+            border: 3px solid #1a237e;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -63,7 +63,7 @@
         
         .question {
             font-size: 1.4rem;
-            color: #2c3e50;
+            color: #1a237e;
             margin: 20px 0;
             font-weight: bold;
             line-height: 1.3;
@@ -99,22 +99,22 @@
         }
         
         .btn-yes {
-            background-color: #3498db;
+            background-color: #4CAF50;
             color: white;
         }
         
         .btn-yes:active, .btn-yes:hover {
-            background-color: #2980b9;
+            background-color: #45a049;
             transform: translateY(-2px);
         }
         
         .btn-no {
-            background-color: #e74c3c;
+            background-color: #ff3333;
             color: white;
         }
         
         .btn-no:active, .btn-no:hover {
-            background-color: #c0392b;
+            background-color: #e60000;
             transform: translateY(-2px);
         }
         
@@ -130,7 +130,7 @@
         
         .heart {
             position: absolute;
-            color: #3498db;
+            color: #1a237e;
             font-size: 18px;
             opacity: 0;
             animation: float 5s linear infinite;
@@ -156,7 +156,7 @@
         .message {
             margin-top: 20px;
             font-size: 1.2rem;
-            color: #2c3e50;
+            color: #1a237e;
             min-height: 40px;
             font-weight: bold;
             opacity: 0;
@@ -169,14 +169,15 @@
         
         @media (max-width: 480px) {
             .buttons-container {
-                flex-direction: column;
-                align-items: center;
+                flex-direction: row;
+                flex-wrap: wrap;
                 gap: 15px;
             }
             
             .btn {
-                width: 100%;
-                max-width: 250px;
+                width: auto;
+                flex: 1;
+                min-width: 140px;
                 padding: 16px;
                 font-size: 1.3rem;
             }
@@ -204,7 +205,7 @@
 </head>
 <body>
     <div class="container">
-        <h1></h1>
+        <h1>❤️ Walentynka ❤️</h1>
         
         <div class="gif-container">
             <img src="https://gifdb.com/images/high/cute-love-bear-roses-ou7zho5oosxnpo6k.gif" alt="Miś z różami">
@@ -262,7 +263,6 @@
             
             function handleYesClick() {
                 questionText.textContent = "YEEEEEY! Wiedzialem, ze to wybierzesz haha";
-                message.classList.add('show');
                 
                 const gifContainer = document.querySelector('.gif-container img');
                 gifContainer.src = "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExc2F6aXRmd3AwZW15cXNnZHhuY2IwMnNtZ3AxdTg0bXY0MmVsMmd6MiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/IzXiddo2twMmdmU8Lv/giphy.gif";
@@ -281,8 +281,8 @@
                 const styleSheet = document.styleSheets[0];
                 styleSheet.insertRule(`
                     @keyframes pulse {
-                        from { transform: scale(1); background-color: #3498db; }
-                        to { transform: scale(1.1); background-color: #2980b9; }
+                        from { transform: scale(1); background-color: #4CAF50; }
+                        to { transform: scale(1.1); background-color: #45a049; }
                     }
                 `, styleSheet.cssRules.length);
                 
@@ -292,8 +292,11 @@
             }
             
             function handleNoClick() {
-                yesScale += 0.5;
+                yesScale += 0.15;
+                if (yesScale > 2.0) yesScale = 2.0;
+                
                 yesBtn.style.transform = `scale(${yesScale})`;
+                yesBtn.style.zIndex = '3';
                 
                 if (noClickCount < noMessages.length) {
                     noBtn.textContent = noMessages[noClickCount];
@@ -304,8 +307,8 @@
                 
                 noClickCount++;
                 
-                const currentScale = 1 - (noClickCount * 0.1);
-                noBtn.style.transform = `scale(${Math.max(currentScale, 0.3)})`;
+                const currentScale = 1 - (noClickCount * 0.08);
+                noBtn.style.transform = `scale(${Math.max(currentScale, 0.4)})`;
                 
                 const containerRect = buttonsContainer.getBoundingClientRect();
                 const btnRect = noBtn.getBoundingClientRect();
@@ -320,18 +323,7 @@
                 noBtn.style.left = randomX + 'px';
                 noBtn.style.top = randomY + 'px';
                 
-                const redShades = ['#e74c3c', '#c0392b', '#d35400', '#e67e22'];
-                noBtn.style.backgroundColor = redShades[noClickCount % redShades.length];
-                
-                const sadMessages = [
-                    "Kliknij TAK! ❤️",
-                    "Nie poddawaj się!",
-                    "Proszę, powiedz TAK!"
-                ];
-                message.textContent = sadMessages[Math.floor(Math.random() * sadMessages.length)];
-                message.classList.add('show');
-                
-                for (let i = 0; i < 5; i++) {
+                for (let i = 0; i < 3; i++) {
                     const heart = document.createElement('div');
                     heart.classList.add('heart');
                     heart.innerHTML = '❤';
@@ -348,6 +340,8 @@
                 
                 if (noClickCount >= 10) {
                     noBtn.style.display = 'none';
+                    yesBtn.style.transform = 'scale(1.5)';
+                    yesBtn.style.margin = '0 auto';
                 }
             }
             
