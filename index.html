@@ -41,6 +41,8 @@
             color: #1a237e;
             margin-bottom: 15px;
             font-size: 1.6rem;
+            z-index: 1;
+            position: relative;
         }
         
         .gif-container {
@@ -53,6 +55,9 @@
             justify-content: center;
             align-items: center;
             border-radius: 8px;
+            position: relative;
+            z-index: 1;
+            transition: transform 0.3s ease;
         }
         
         .gif-container img {
@@ -67,6 +72,9 @@
             margin: 20px 0;
             font-weight: bold;
             line-height: 1.3;
+            position: relative;
+            z-index: 1;
+            transition: transform 0.3s ease;
         }
         
         .buttons-container {
@@ -77,6 +85,7 @@
             position: relative;
             min-height: 60px;
             touch-action: manipulation;
+            z-index: 1;
         }
         
         .btn {
@@ -101,6 +110,7 @@
         .btn-yes {
             background-color: #4CAF50;
             color: white;
+            z-index: 2;
         }
         
         .btn-yes:active, .btn-yes:hover {
@@ -111,6 +121,8 @@
         .btn-no {
             background-color: #ff3333;
             color: white;
+            z-index: 100;
+            position: relative;
         }
         
         .btn-no:active, .btn-no:hover {
@@ -161,6 +173,8 @@
             font-weight: bold;
             opacity: 0;
             transition: opacity 0.5s ease;
+            z-index: 1;
+            position: relative;
         }
         
         .message.show {
@@ -205,7 +219,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>❤️ Walentynka ❤️</h1>
+        <h1></h1>
         
         <div class="gif-container">
             <img src="https://gifdb.com/images/high/cute-love-bear-roses-ou7zho5oosxnpo6k.gif" alt="Miś z różami">
@@ -231,6 +245,7 @@
             const heartsContainer = document.getElementById('heartsContainer');
             const buttonsContainer = document.querySelector('.buttons-container');
             const questionText = document.getElementById('questionText');
+            const gifContainer = document.querySelector('.gif-container');
             
             let yesScale = 1;
             let noClickCount = 0;
@@ -264,8 +279,8 @@
             function handleYesClick() {
                 questionText.textContent = "YEEEEEY! Wiedzialem, ze to wybierzesz haha";
                 
-                const gifContainer = document.querySelector('.gif-container img');
-                gifContainer.src = "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExc2F6aXRmd3AwZW15cXNnZHhuY2IwMnNtZ3AxdTg0bXY0MmVsMmd6MiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/IzXiddo2twMmdmU8Lv/giphy.gif";
+                const gifImg = document.querySelector('.gif-container img');
+                gifImg.src = "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExc2F6aXRmd3AwZW15cXNnZHhuY2IwMnNtZ3AxdTg0bXY0MmVsMmd6MiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/IzXiddo2twMmdmU8Lv/giphy.gif";
 
                 for (let i = 0; i < 40; i++) {
                     const heart = document.createElement('div');
@@ -292,11 +307,15 @@
             }
             
             function handleNoClick() {
-                yesScale += 0.15;
-                if (yesScale > 2.0) yesScale = 2.0;
+                yesScale += 0.4;
+                if (yesScale > 3.0) yesScale = 3.0;
                 
                 yesBtn.style.transform = `scale(${yesScale})`;
                 yesBtn.style.zIndex = '3';
+                
+                const moveUpAmount = Math.min((yesScale - 1) * 20, 60);
+                gifContainer.style.transform = `translateY(-${moveUpAmount}px)`;
+                questionText.style.transform = `translateY(-${moveUpAmount}px)`;
                 
                 if (noClickCount < noMessages.length) {
                     noBtn.textContent = noMessages[noClickCount];
@@ -309,12 +328,13 @@
                 
                 const currentScale = 1 - (noClickCount * 0.08);
                 noBtn.style.transform = `scale(${Math.max(currentScale, 0.4)})`;
+                noBtn.style.zIndex = '1000';
                 
-                const containerRect = buttonsContainer.getBoundingClientRect();
+                const containerRect = document.querySelector('.container').getBoundingClientRect();
                 const btnRect = noBtn.getBoundingClientRect();
                 
-                const maxX = containerRect.width - btnRect.width;
-                const maxY = containerRect.height - btnRect.height;
+                const maxX = containerRect.width - btnRect.width - 20;
+                const maxY = containerRect.height - btnRect.height - 20;
                 
                 const randomX = Math.random() * maxX;
                 const randomY = Math.random() * maxY;
@@ -334,14 +354,15 @@
                 }
                 
                 if (noClickCount >= 5) {
-                    const gifContainer = document.querySelector('.gif-container img');
-                    gifContainer.src = "https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExZ2V0a3RycmUzbDYxeXd1cXI1M3J4aGYxd2pnZ3k1bW8yc3VmbDc4NiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/OHRF8LZis06OiPDJby/giphy.gif";
+                    const gifImg = document.querySelector('.gif-container img');
+                    gifImg.src = "https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExZ2V0a3RycmUzbDYxeXd1cXI1M3J4aGYxd2pnZ3k1bW8yc3VmbDc4NiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/OHRF8LZis06OiPDJby/giphy.gif";
                 }
                 
                 if (noClickCount >= 10) {
                     noBtn.style.display = 'none';
-                    yesBtn.style.transform = 'scale(1.5)';
+                    yesBtn.style.transform = 'scale(2)';
                     yesBtn.style.margin = '0 auto';
+                    yesBtn.style.zIndex = '3';
                 }
             }
             
@@ -349,24 +370,25 @@
                 e.preventDefault();
                 
                 if (noClickCount > 2 && noClickCount < 10) {
-                    const containerRect = buttonsContainer.getBoundingClientRect();
+                    const containerRect = document.querySelector('.container').getBoundingClientRect();
                     const btnRect = noBtn.getBoundingClientRect();
                     
-                    const maxX = containerRect.width - btnRect.width;
-                    const maxY = containerRect.height - btnRect.height;
+                    const maxX = containerRect.width - btnRect.width - 20;
+                    const maxY = containerRect.height - btnRect.height - 20;
                     
                     let currentLeft = parseInt(noBtn.style.left) || 0;
                     let currentTop = parseInt(noBtn.style.top) || 0;
                     
-                    const moveX = (Math.random() - 0.5) * 80;
-                    const moveY = (Math.random() - 0.5) * 80;
+                    const moveX = (Math.random() - 0.5) * 100;
+                    const moveY = (Math.random() - 0.5) * 100;
                     
-                    const newX = Math.max(10, Math.min(maxX - 10, currentLeft + moveX));
-                    const newY = Math.max(10, Math.min(maxY - 10, currentTop + moveY));
+                    const newX = Math.max(10, Math.min(maxX, currentLeft + moveX));
+                    const newY = Math.max(10, Math.min(maxY, currentTop + moveY));
                     
                     noBtn.style.transition = 'all 0.15s ease';
                     noBtn.style.left = newX + 'px';
                     noBtn.style.top = newY + 'px';
+                    noBtn.style.zIndex = '1000';
                     
                     setTimeout(() => {
                         noBtn.style.transition = 'all 0.2s ease';
